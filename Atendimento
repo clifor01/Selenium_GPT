@@ -1,0 +1,1031 @@
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System;
+using OpenQA.Selenium.Support.UI;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using OpenQA.Selenium.Remote;
+
+class Program
+{
+    static void Main()
+    {
+        // Instância da classe Program para acessar os métodos
+        Program program = new Program();
+
+        // Chama os métodos para cada parte do código
+        program.PrimeiraParte();
+        program.SegundaParte();
+        program.TerceiraParte();
+    }
+
+    void PrimeiraParte()
+    {
+        // Especifica o caminho para o driver do Browse
+        // Certifique-se de baixar o driver correspondente à versão do seu Chrome: https://sites.google.com/chromium.org/driver/
+        string caminhoDriver = @"C:\Users\e5016150\Desktop\Testes_CENCOSIV\Testes_clifor\packages\Selenium.WebDriver.ChromeDriver.120.0.6099.7100\driver\win32";
+
+        // Cria uma instância do ChromeOptions
+        ChromeOptions chromeOptions = new ChromeOptions();
+
+        // Adiciona a opção headless
+        chromeOptions.AddArgument("--headless");
+
+        // Cria uma instância do driver do Chrome com as opções configuradas
+        IWebDriver driver = new ChromeDriver(caminhoDriver, chromeOptions);
+
+        // Cria uma instância do driver do Chrome
+        //IWebDriver driver = new ChromeDriver(caminhoDriver);
+
+
+        try
+        {
+            // Maximiza a janela do navegador
+            driver.Manage().Window.Maximize();
+
+            // Navega até a URL de login
+            driver.Navigate().GoToUrl("http://10.99.168.77:8082/sivj-web/");
+
+            // Aguarda alguns segundos (opcional)
+            //System.Threading.Thread.Sleep(6000);
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("idp-first-time-login-loginname")));
+
+
+            // Localiza os campos de login e senha
+            IWebElement campoLogin = driver.FindElement(By.Id("idp-first-time-login-loginname"));
+            IWebElement campoSenha = driver.FindElement(By.Id("idp-first-time-login-password"));
+
+            // Insere o login e a senha
+            campoLogin.SendKeys("fisadm");
+            campoSenha.SendKeys("Fidel@123");
+
+
+            // Substitui o Thread.Sleep(2000) por uma espera explícita
+            wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//span[@class='mat-button-wrapper' and contains(text(),'Sign in')]"))).Click();
+
+            // Localiza o botão "Entrar" por class
+            //IWebElement botaoEntrar = driver.FindElement(By.XPath("//span[@class='mat-button-wrapper' and contains(text(),'Sign in')]"));
+
+            // Clica no botão "Entrar"
+            //botaoEntrar.Click();
+
+            System.Threading.Thread.Sleep(2000);
+
+            IWebElement botaoEnviar = driver.FindElement(By.XPath("//button[@id='proceed-button' and contains(text(),'Send anyway')]"));
+
+            // Clica no botão "Enviar"
+            botaoEnviar.Click();
+
+            // Aguarda alguns segundos (opcional)
+            System.Threading.Thread.Sleep(2000);
+
+            //wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("frmRegLojOff:svwRegionalLojaOfficerTarefa:btnAplicar')]")));
+
+            // Localiza e clica no item "Atendimento" no menu
+            //IWebElement itemAtendimento = driver.FindElement(By.XPath("//span[@class='iceMnuBarItemLabel' and contains(text(),'Atendimento')]"));
+            IWebElement itemAtendimento = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//span[@class='iceMnuBarItemLabel' and contains(text(),'Atendimento')]")));
+            itemAtendimento.Click();
+
+            // Localiza e clica no item "Receptivo" no menu
+            //IWebElement itemReceptivo = driver.FindElement(By.XPath("//span[@class='iceOutTxt iceMnuItmLabel' and contains(text(),'Receptivo')]"));
+            IWebElement itemReceptivo = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//span[@class='iceOutTxt iceMnuItmLabel' and contains(text(),'Receptivo')]")));
+            itemReceptivo.Click();
+
+            // Aguarda alguns segundos (opcional)
+            //System.Threading.Thread.Sleep(3000);
+
+            //Botão para abrir os filtros de consulta
+            IWebElement itemCampoFiltro = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("j_id56:svwFiltrosOcorAtend:ateRecSlcOneTipFil")));
+            itemCampoFiltro.Click();
+
+            //System.Threading.Thread.Sleep(2000);
+
+            // Localizar e clicar no elemento select pelo ID
+            IWebElement selectElement = driver.FindElement(By.Id("j_id56:svwFiltrosOcorAtend:ateRecSlcOneTipFil"));
+            selectElement.Click();
+
+            // Usar a classe SelectElement para interagir com o dropdown
+            SelectElement select = new SelectElement(selectElement);
+
+            // Selecionar a opção "Contrato" pelo texto
+            select.SelectByText("CONTRATO");
+
+            System.Threading.Thread.Sleep(2000);
+
+            // Clique no elemento para garantir que está focado
+            IWebElement elementoNumProposta = driver.FindElement(By.Id("j_id56:svwFiltrosOcorAtend:ateRecTexDescFilContrato"));
+            elementoNumProposta.Click();
+
+            System.Threading.Thread.Sleep(1000);
+
+            // Insira o número da proposta
+            elementoNumProposta.SendKeys("000020000319");
+
+            // Clique no botão de busca
+            IWebElement botaoBuscar = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("j_id56:svwFiltrosOcorAtend:ateRecBtnBuscar")));
+            botaoBuscar.Click();
+
+            System.Threading.Thread.Sleep(1000);
+
+            IWebElement elementobotaoPid = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("j_id56:svwFiltrosOcorAtend:svwPopupQuestoesPID:tableQuestoes:0:btnConfirmar")));
+            elementobotaoPid.Click();
+
+            System.Threading.Thread.Sleep(1000);
+
+            IWebElement elementobotaoPid2 = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("j_id56:svwFiltrosOcorAtend:svwPopupQuestoesPID:tableQuestoes:0:btnConfirmar")));
+            elementobotaoPid2.Click();
+
+            System.Threading.Thread.Sleep(1000);
+
+            IWebElement elementobotaoPid3 = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("j_id56:svwFiltrosOcorAtend:svwPopupQuestoesPID:tableQuestoes:0:btnConfirmar")));
+            elementobotaoPid3.Click();
+
+            System.Threading.Thread.Sleep(1000);
+
+            IWebElement elementobotaoPid4 = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("j_id56:svwFiltrosOcorAtend:svwPopupQuestoesPID:tableQuestoes:0:btnConfirmar")));
+            elementobotaoPid4.Click();
+
+            System.Threading.Thread.Sleep(1000);
+
+            // Aqui, você precisa localizar o elemento da proposta pelo ID ou por outro seletor específico
+            IWebElement proposta = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("j_id56:svwOcorCockpit:svwFilRecGridContr:gridOperacoesContratos:0:j_id121")));
+            proposta.Click();
+
+            //System.Threading.Thread.Sleep(2000);
+
+            // Clicar no Botão do protocolo (gerar)
+            IWebElement protocolo = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("j_id56:svwOcorCockpit:svwPopupProtocolo:protBtnGerar")));
+            protocolo.Click();
+
+            // Aguarda alguns segundos (opcional)
+            //System.Threading.Thread.Sleep(7000);
+
+
+            // Clicar na aba Cliente
+            IWebElement abacliente = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("frmAtend:ptsFin:0.2")));
+            abacliente.Click();
+
+            //System.Threading.Thread.Sleep(7000);
+
+            // Localizar o elemento pelo ID
+            IWebElement campoNome = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtNome")));
+            IWebElement campoCPF = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtCpf"));
+            IWebElement campoDataNasc = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtDataNascimento"));
+            IWebElement campoRadio = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:slcRadioSexo"));
+            IWebElement campoNacionalidade = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:slcOneCodigoNacionalidade"));
+            IWebElement campoNaturalidade = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtNaturalidade"));
+            IWebElement campoUF = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:cmbUf"));
+            IWebElement campoTipoIdent = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:cmbTipoIdent"));
+            IWebElement campoNumRG = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtRg"));
+            IWebElement campoDigRG = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtDigitoRg"));
+            IWebElement campoOE = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:cmbOe"));
+            IWebElement campoDataExp = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtDataExpedicao"));
+            IWebElement campoUFRG = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:cmbUfRg"));
+            IWebElement campoNomePai = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtPai"));
+            IWebElement campoNomeMae = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtMae"));
+            IWebElement campoEstadoCivil = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:slcOneEstadoCivil"));
+            IWebElement campoEscolaridade = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:cmbEscolaridade"));
+            IWebElement campoDependente = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtDependente"));
+            IWebElement campoQtdeFilhos = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniBas:txtFilho"));
+            IWebElement campoNatOcup = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:naturezaOcupacao"));
+            IWebElement campoProfissao = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:nmeProfissao"));
+            IWebElement campoSalario = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:valSalarioLiq"));
+            IWebElement campoCargo = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:nmeCargo"));
+            IWebElement campoRendaLiq = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:valRendaLiq"));
+            IWebElement campoTipoComprovante = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:tipoComprovante"));
+            IWebElement campoDiaPagamento = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:diaPagto"));
+            IWebElement campoOcupaçao = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:tipoOcupacao"));
+            IWebElement campoNomeEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:descRazaoSocial2"));
+            IWebElement campoCGCEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:numCgcEmpresa"));
+            IWebElement campoTempoEmpresaAnos = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:tempoEmpresaAnos"));
+            IWebElement campoTempoEmpresaMeses = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:tempoEmpresaMeses"));
+            IWebElement campoCepEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:codigoCep"));
+            IWebElement campoRuaEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:descricaoLogradouro"));
+            IWebElement campoNrEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:numeroLogradouro"));
+            IWebElement campoComplementoEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:complementoLogradouro"));
+            IWebElement campoBairroEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:descricaoBairro"));
+            IWebElement campoCidadeEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:descricaoCidade"));
+            IWebElement campoUFEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:uf"));
+            IWebElement campoContatoEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:nomeContato"));
+            IWebElement campoDDDEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:numAreaTelefoneEmp"));
+            IWebElement campoFoneEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:numTelefone"));
+            IWebElement campoRamalEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:codRamal3"));
+            IWebElement campoDDDfaxEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:numAreaFaxEmp"));
+            IWebElement campoFonefaxEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:numFax"));
+            IWebElement campoDDD2Empresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:numAreaTelCont"));
+            IWebElement campoFone2Empresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:numTelefoneCont"));
+            IWebElement campoRamal2Empresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:svwOcEndEmp:codRamalCont"));
+            IWebElement campoTempoEmpresaAntAnos = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:qtdAnoEmpAnt"));
+            IWebElement campoTempoEmpresaAntMeses = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:qtdMesEmpAnt"));
+            IWebElement campoDataDesligEmpresa = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniOcupacoes:svwGrdOcOcup:dataDesligAnter"));
+            IList<IWebElement> radioButtons = driver.FindElements(By.Name("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:tipoEndereco"));
+            IWebElement campoEnvioCorresp = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:flagEnviaCorrespBoolean"));
+            IWebElement campoCepRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwGrdEndEnd:codigoCep"));
+            IWebElement campoRuaRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwGrdEndEnd:descricaoLogradouro"));
+            IWebElement campoNrRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwGrdEndEnd:numeroLogradouro"));
+            IWebElement campoComplRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwGrdEndEnd:complementoLogradouro"));
+            IWebElement campoBairroRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwGrdEndEnd:descricaoBairro"));
+            IWebElement campoCidadeRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwGrdEndEnd:descricaoCidade"));
+            IWebElement campoUFRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwGrdEndEnd:uf"));
+            IWebElement campoTipoRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:tipoResidencia"));
+            IWebElement campoAluguelRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:valAluguelFinanc"));
+            IWebElement campoTempoResAno = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:qtdeAnoResid"));
+            IWebElement campoTempoResMes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:qtdeMesResid"));
+            IWebElement campoDDDRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwTel:numAreaTelefone"));
+            IWebElement campoFoneRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwTel:numTelefone"));
+            IWebElement campoRamalRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwTel:codRamal"));
+            IWebElement campoTipoFoneRes = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniEnderecos:svwTel:tipoTelefone"));
+            IWebElement campoNomeRef1 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:0:j_id2800']"));
+            IWebElement campoAfinidadeRef1 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:0:j_id2803']"));
+            IWebElement campoDDDRef1 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:0:j_id2806']"));
+            IWebElement campoFoneRef1 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:0:j_id2809']"));
+            IWebElement campoRamalRef1 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:0:j_id2812']"));
+            IWebElement campoNomeRef2 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:1:j_id2800']"));
+            IWebElement campoAfinidadeRef2 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:1:j_id2803']"));
+            IWebElement campoDDDRef2 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:1:j_id2806']"));
+            IWebElement campoFoneRef2 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:1:j_id2809']"));
+            IWebElement campoRamalRef2 = driver.FindElement(By.CssSelector("span.iceOutTxt[id*='dataTableReferenciasPessoais:1:j_id2812']"));
+            IWebElement campoBanco = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:txtRefBancariaBanco"));
+            IWebElement campoAgencia = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:txtRefBancariaAgencia"));
+            IWebElement campoDigAgencia = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:txtRefBancariaDigAgencia"));
+            IWebElement campoConta = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:txtRefBancariaConta"));
+            IWebElement campoDigConta = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:txtRefBancariaDigConta"));
+            IWebElement campoClienteDesde = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:txtRefBancariaClienteDesde"));
+            IWebElement campoTipoConta = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:cmbRefBancariaTipoConta"));
+            IWebElement campoDataAbertura = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:txtRefBancariaDataAbertura"));
+            IWebElement campoPraça = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:cmbRefBancariaPraca"));
+            IWebElement campoContaPrincipal = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:chkRefBancariaPrincipal"));
+            IWebElement campoTitular = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:chkRefBancariaTitular"));
+            IWebElement campoContaDoc = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:chkContaDoc"));
+            IWebElement campoAutDebito = driver.FindElement(By.Id("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliUniRefBanc:chkRefBancariaDebConta"));
+            IWebElement campoEmail = driver.FindElement(By.Name("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliEmail:txtEmailProspect"));
+            IWebElement campoCliente = driver.FindElement(By.Name("frmAtend:ptsFin:0:svwAtendClienteUni:svwCliEmail:cmbTipoEmail"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // Localize todos os elementos de radio button dentro do campoRadio
+            IReadOnlyCollection<IWebElement> opcoesRadio = campoRadio.FindElements(By.CssSelector("input[type='radio']"));
+
+            // Encontre a opção marcada
+            IWebElement opcaoMarcada = opcoesRadio.FirstOrDefault(opcao => opcao.Selected);
+
+            // Itera sobre os radio buttons para encontrar o marcado
+            foreach (IWebElement radioButton in radioButtons)
+            {
+                if (radioButton.Selected)
+                {
+
+                    // Verifica se o checkbox está marcado
+                    bool isCheckboxSelected = campoEnvioCorresp.Selected;
+                    bool isCheckboxSelected2 = campoContaPrincipal.Selected;
+                    bool isCheckboxSelected3 = campoTitular.Selected;
+                    bool isCheckboxSelected4 = campoContaDoc.Selected;
+                    bool isCheckboxSelected5 = campoAutDebito.Selected;
+
+                    // Obter o valor do atributo "value" do elemento input
+                    string valorCampoNome = campoNome.GetAttribute("value");
+                    string valorCampoCPF = campoCPF.GetAttribute("value");
+                    string valorCampoDataNasc = campoDataNasc.GetAttribute("value");
+                    string valorOpcaoMarcada = opcaoMarcada?.GetAttribute("value");
+                    string textoNacionalidade = new SelectElement(campoNacionalidade).SelectedOption.GetAttribute("text");
+                    string valorNaturalidade = campoNaturalidade.GetAttribute("value");
+                    string valorUF = campoUF.GetAttribute("value");
+                    string textoTipoIdent = new SelectElement(campoTipoIdent).SelectedOption.GetAttribute("text");
+                    string valorNumRG = campoNumRG.GetAttribute("value");
+                    string valorDigRG = campoDigRG.GetAttribute("value");
+                    string textoOE = new SelectElement(campoOE).SelectedOption.GetAttribute("text");
+                    string valorDataExp = campoDataExp.GetAttribute("value");
+                    string valorUFRG = campoUFRG.GetAttribute("value");
+                    string valorNomePai = campoNomePai.GetAttribute("value");
+                    string valorNomeMae = campoNomeMae.GetAttribute("value");
+                    string textoEstadoCivil = new SelectElement(campoEstadoCivil).SelectedOption.GetAttribute("text");
+                    string textoEscolaridade = new SelectElement(campoEscolaridade).SelectedOption.GetAttribute("text");
+                    string valorDependente = campoDependente.GetAttribute("value");
+                    string valorQtdeFilhos = campoQtdeFilhos.GetAttribute("value");
+                    string textoNatOcup = new SelectElement(campoNatOcup).SelectedOption.GetAttribute("text");
+                    string valorProfissao = campoProfissao.GetAttribute("value");
+                    string valorSalario = campoSalario.GetAttribute("value");
+                    string valorCargo = campoCargo.GetAttribute("value");
+                    string valorRendaLiq = campoRendaLiq.GetAttribute("value");
+                    string textoTipoComprovante = new SelectElement(campoTipoComprovante).SelectedOption.GetAttribute("text");
+                    string valorDiaPagamento = campoDiaPagamento.GetAttribute("value");
+                    string valorOcupaçao = new SelectElement(campoOcupaçao).SelectedOption.GetAttribute("text");
+                    string valorNomeEmpresa = campoNomeEmpresa.GetAttribute("value");
+                    string valorCGCEmpresa = campoCGCEmpresa.GetAttribute("value");
+                    string valorTempoEmpresaAnos = campoTempoEmpresaAnos.GetAttribute("value");
+                    string valorTempoEmpresaMeses = campoTempoEmpresaMeses.GetAttribute("value");
+                    string valorCepEmpresa = campoCepEmpresa.GetAttribute("value");
+                    string valorRuaEmpresa = campoRuaEmpresa.GetAttribute("value");
+                    string valorNrEmpresa = campoNrEmpresa.GetAttribute("value");
+                    string valorComplementoEmpresa = campoComplementoEmpresa.GetAttribute("value");
+                    string valorBairroEmpresa = campoBairroEmpresa.GetAttribute("value");
+                    string valorCidadeEmpresa = campoCidadeEmpresa.GetAttribute("value");
+                    string textoUFEmpresa = new SelectElement(campoUFEmpresa).SelectedOption.GetAttribute("text");
+                    string valorContatoEmpresa = campoContatoEmpresa.GetAttribute("value");
+                    string valorDDDEmpresa = campoDDDEmpresa.GetAttribute("value");
+                    string valorFoneEmpresa = campoFoneEmpresa.GetAttribute("value");
+                    string valorRamalEmpresa = campoRamalEmpresa.GetAttribute("value");
+                    string valorDDDfaxEmpresa = campoDDDfaxEmpresa.GetAttribute("value");
+                    string valorFonefaxEmpresa = campoFonefaxEmpresa.GetAttribute("value");
+                    string valorDDD2Empresa = campoDDD2Empresa.GetAttribute("value");
+                    string valorFone2Empresa = campoFone2Empresa.GetAttribute("value");
+                    string valorRamal2Empresa = campoRamal2Empresa.GetAttribute("value");
+                    string valorTempoEmpresaAntAnos = campoTempoEmpresaAntAnos.GetAttribute("value");
+                    string valorTempoEmpresaAntMeses = campoTempoEmpresaAntMeses.GetAttribute("value");
+                    string valorDataDesligEmpresa = campoDataDesligEmpresa.GetAttribute("value");
+                    string valorLocalCorresp = radioButton.GetAttribute("value");
+                    string valorEnvioCorresp = isCheckboxSelected ? "Sim" : "Não";
+                    string valorCepRes = campoCepRes.GetAttribute("value");
+                    string valorRuaRes = campoRuaRes.GetAttribute("value");
+                    string valorNrRes = campoNrRes.GetAttribute("value");
+                    string valorComplRes = campoComplRes.GetAttribute("value");
+                    string valorBairroRes = campoBairroRes.GetAttribute("value");
+                    string valorCidadeRes = campoCidadeRes.GetAttribute("value");
+                    string textoUFRes = new SelectElement(campoUFRes).SelectedOption.GetAttribute("text");
+                    string textoTipoRes = new SelectElement(campoTipoRes).SelectedOption.GetAttribute("text");
+                    string valorAluguelRes = campoAluguelRes.GetAttribute("value");
+                    string valorTempoResAno = campoTempoResAno.GetAttribute("value");
+                    string valorTempoResMes = campoTempoResMes.GetAttribute("value");
+                    string valorDDDRes = campoDDDRes.GetAttribute("value");
+                    string valorFoneRes = campoFoneRes.GetAttribute("value");
+                    string valorRamalRes = campoRamalRes.GetAttribute("value");
+                    string textoTipoFoneRes = new SelectElement(campoTipoFoneRes).SelectedOption.GetAttribute("text");
+                    string textoNomeRef1 = campoNomeRef1.Text;
+                    string textoAfinidadeRef1 = campoAfinidadeRef1.Text;
+                    string textoDDDRef1 = campoDDDRef1.Text;
+                    string textoFoneRef1 = campoFoneRef1.Text;
+                    string textoRamalRef1 = campoRamalRef1.Text;
+                    string textoNomeRef2 = campoNomeRef2.Text;
+                    string textoAfinidadeRef2 = campoAfinidadeRef2.Text;
+                    string textoDDDRef2 = campoDDDRef2.Text;
+                    string textoFoneRef2 = campoFoneRef2.Text;
+                    string textoRamalRef2 = campoRamalRef2.Text;
+                    string valorBanco = campoBanco.GetAttribute("value");
+                    string valorAgencia = campoAgencia.GetAttribute("value");
+                    string valorDigAgencia = campoDigAgencia.GetAttribute("value");
+                    string valorConta = campoConta.GetAttribute("value");
+                    string valorDigConta = campoDigConta.GetAttribute("value");
+                    string valorClienteDesde = campoClienteDesde.GetAttribute("value");
+                    string textoTipoConta = new SelectElement(campoTipoConta).SelectedOption.GetAttribute("text");
+                    string valorDataAbertura = campoDataAbertura.GetAttribute("value");
+                    string textoPraça = new SelectElement(campoPraça).SelectedOption.GetAttribute("text");
+                    string valorContaPrincipal = isCheckboxSelected2 ? "Sim" : "Não";
+                    string valorTitular = isCheckboxSelected3 ? "Sim" : "Não";
+                    string valorContaDoc = isCheckboxSelected4 ? "Sim" : "Não";
+                    string valorAutDebito = isCheckboxSelected5 ? "Sim" : "Não";
+                    string valorEmail = campoEmail.GetAttribute("value");
+                    string textoCliente = new SelectElement(campoCliente).SelectedOption.GetAttribute("text");
+
+
+
+                    // Obter a data atual
+                    DateTime dataAtual = DateTime.Now;
+
+                    // Caminho para o arquivo onde você deseja salvar as informações
+                    string caminhoArquivo = @"C:\Users\e5016150\Desktop\Testes_ATENDIMENTO CENCOSUD\Testes_clifor\Arquivo.txt";
+
+                    // Abrir ou criar o arquivo
+                    using (StreamWriter sw = new StreamWriter(caminhoArquivo, false))
+                    {
+                        // Escrever as informações no arquivo
+                        sw.WriteLine("Campos do Contrato: " + dataAtual.ToString("dd/MM/yyyy HH:mm:ss"));
+                        sw.WriteLine($"Cliente: {valorCampoNome}");
+                        sw.WriteLine($"CPF: {valorCampoCPF}");
+                        sw.WriteLine($"Data Nasc: {valorCampoDataNasc}");
+                        sw.WriteLine($"Genero: {valorOpcaoMarcada}");
+                        sw.WriteLine($"Nacionalidade: {textoNacionalidade}");
+                        sw.WriteLine($"Naturalidade: {valorNaturalidade}");
+                        sw.WriteLine($"UF: {valorUF}");
+                        sw.WriteLine($"TipoIdent: {textoTipoIdent}");
+                        sw.WriteLine($"RG: {valorNumRG}-{valorDigRG}");
+                        sw.WriteLine($"OE: {textoOE}");
+                        sw.WriteLine($"Data Expedição: {valorDataExp}");
+                        sw.WriteLine($"UFRG: {valorUFRG}");
+                        sw.WriteLine($"Nome Pai: {valorNomePai}");
+                        sw.WriteLine($"Nome Mae: {valorNomeMae}");
+                        sw.WriteLine($"Estado Civil: {textoEstadoCivil}");
+                        sw.WriteLine($"Escolaridade: {textoEscolaridade}");
+                        sw.WriteLine($"Dependentes: {valorDependente}");
+                        sw.WriteLine($"Qtde Filhos: {valorQtdeFilhos}");
+                        sw.WriteLine($"Natureza Ocupação: {textoNatOcup}");
+                        sw.WriteLine($"Profissão: {valorProfissao}");
+                        sw.WriteLine($"Salário: {valorSalario}");
+                        sw.WriteLine($"Cargo: {valorCargo}");
+                        sw.WriteLine($"Renda Liquida: {valorRendaLiq}");
+                        sw.WriteLine($"Tipo Comprovante: {textoTipoComprovante}");
+                        sw.WriteLine($"Dia Pagamento: {valorDiaPagamento}");
+                        sw.WriteLine($"Ocupação: {valorOcupaçao}");
+                        sw.WriteLine($"Nome Empresa: {valorNomeEmpresa}");
+                        sw.WriteLine($"CGC Empresa: {valorCGCEmpresa}");
+                        sw.WriteLine($"Tempo Empresa: {valorTempoEmpresaAnos} Anos { valorTempoEmpresaMeses} Meses");
+                        sw.WriteLine($"CEP Empresa: {valorCepEmpresa}");
+                        sw.WriteLine($"RUA Empresa: {valorRuaEmpresa}");
+                        sw.WriteLine($"NR Empresa: {valorNrEmpresa}");
+                        sw.WriteLine($"Complemento Empresa: {valorComplementoEmpresa}");
+                        sw.WriteLine($"Bairro Empresa: {valorBairroEmpresa}");
+                        sw.WriteLine($"Cidade Empresa: {valorCidadeEmpresa}");
+                        sw.WriteLine($"UF Empresa: {textoUFEmpresa}");
+                        sw.WriteLine($"Contato Empresa: {valorContatoEmpresa}");
+                        sw.WriteLine($"Telefone Empresa: DDD {valorDDDEmpresa} Fone {valorFoneEmpresa} Ramal {valorRamalEmpresa}");
+                        sw.WriteLine($"FAX Empresa: DDD {valorDDDfaxEmpresa} Fone {valorFonefaxEmpresa}");
+                        sw.WriteLine($"Telefone2 Empresa: DDD {valorDDD2Empresa} Fone {valorFone2Empresa} Ramal {valorRamal2Empresa}");
+                        sw.WriteLine($"Tempo Empresa Ant: {valorTempoEmpresaAntAnos} Anos {valorTempoEmpresaAntMeses} Meses {valorDataDesligEmpresa}");
+                        sw.WriteLine($"Data Desligamento: {valorDataDesligEmpresa}");
+                        sw.WriteLine($"Local Corresp: {valorLocalCorresp}");
+                        sw.WriteLine($"Envio Corresp: {valorEnvioCorresp}");
+                        sw.WriteLine($"Cep Res: {valorCepRes}");
+                        sw.WriteLine($"Rua Res: {valorRuaRes}");
+                        sw.WriteLine($"Nr Res: {valorNrRes}");
+                        sw.WriteLine($"Complemento Res: {valorComplRes}");
+                        sw.WriteLine($"Bairro Res: {valorBairroRes}");
+                        sw.WriteLine($"Cidade Res: {valorCidadeRes}");
+                        sw.WriteLine($"UF Res: {textoUFRes}");
+                        sw.WriteLine($"Tipo Residencia: {textoTipoRes}");
+                        sw.WriteLine($"Aluguel: {valorAluguelRes}");
+                        sw.WriteLine($"Tempo Residencia: {valorTempoResAno} Anos {valorTempoResMes} Meses");
+                        sw.WriteLine($"DDD Res: {valorDDDRes}");
+                        sw.WriteLine($"Fone Res: {valorFoneRes}");
+                        sw.WriteLine($"Ramal Res: {valorRamalRes}");
+                        sw.WriteLine($"Tipo Tel Res: {textoTipoFoneRes}");
+                        sw.WriteLine($"Nome Ref: {textoNomeRef1}");
+                        sw.WriteLine($"Afinidade Ref: {textoAfinidadeRef1}");
+                        sw.WriteLine($"DDD Ref: {textoDDDRef1}");
+                        sw.WriteLine($"Fone Ref: {textoFoneRef1}");
+                        sw.WriteLine($"Ramal Ref: {textoRamalRef1}");
+                        sw.WriteLine($"Nome Ref2: {textoNomeRef2}");
+                        sw.WriteLine($"Afinidade Ref2: {textoAfinidadeRef2}");
+                        sw.WriteLine($"DDD Ref2: {textoDDDRef2}");
+                        sw.WriteLine($"Fone Ref2: {textoFoneRef2}");
+                        sw.WriteLine($"Ramal Ref2: {textoRamalRef2}");
+                        sw.WriteLine($"Banco: {valorBanco}");
+                        sw.WriteLine($"Agencia e Digito: {valorAgencia}-{valorDigAgencia}");
+                        sw.WriteLine($"Conta e Digito: {valorConta}-{valorDigConta}");
+                        sw.WriteLine($"Cliente Desde: {valorClienteDesde}");
+                        sw.WriteLine($"Tipo Residencia: {textoTipoConta}");
+                        sw.WriteLine($"Data Abertura: {valorDataAbertura}");
+                        sw.WriteLine($"Praça: {textoPraça}");
+                        sw.WriteLine($"Conta Principal: {valorContaPrincipal}");
+                        sw.WriteLine($"Titular: {valorTitular}");
+                        sw.WriteLine($"Conta para DOC: {valorContaDoc}");
+                        sw.WriteLine($"Autoriza Debito em Conta: {valorAutDebito}");
+                        sw.WriteLine($"Email: {valorEmail}");
+                        sw.WriteLine($"Tipo Email: {textoCliente}");
+                        // Fecha o navegador
+                        driver.Quit();
+
+                    }
+                }
+            }
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ocorreu um erro: " + ex.Message);
+        }
+    }
+    
+
+    void SegundaParte()
+    {
+    // Especifica o caminho para o driver do Browse
+    // Certifique-se de baixar o driver correspondente à versão do seu Chrome: https://sites.google.com/chromium.org/driver/
+    string caminhoDriver = @"C:\Users\e5016150\Desktop\Testes_CENCOSIV\Testes_clifor\packages\Selenium.WebDriver.ChromeDriver.120.0.6099.7100\driver\win32";
+
+        // Cria uma instância do ChromeOptions
+        ChromeOptions chromeOptions = new ChromeOptions();
+
+        // Adiciona a opção headless
+        chromeOptions.AddArgument("--headless");
+
+        // Cria uma instância do driver do Chrome com as opções configuradas
+        IWebDriver driver = new ChromeDriver(caminhoDriver, chromeOptions);
+
+        // Cria uma instância do driver do Chrome
+        //IWebDriver driver = new ChromeDriver(caminhoDriver);
+
+
+        try
+    {
+        // Maximiza a janela do navegador
+        driver.Manage().Window.Maximize();
+
+        // Navega até a URL de login
+        driver.Navigate().GoToUrl("https://siv-cencosud-desenv.fnis.com.br/atendimento/");
+
+        // Aguarda alguns segundos (opcional)
+        //System.Threading.Thread.Sleep(6000);
+
+        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+        wait.Until(ExpectedConditions.ElementIsVisible(By.Id("idp-first-time-login-loginname")));
+
+
+        // Localiza os campos de login e senha
+        IWebElement campoLogin = driver.FindElement(By.Id("idp-first-time-login-loginname"));
+        IWebElement campoSenha = driver.FindElement(By.Id("idp-first-time-login-password"));
+
+        // Insere o login e a senha
+        campoLogin.SendKeys("fisadm");
+        campoSenha.SendKeys("Fidel@123");
+
+
+        // Localiza o botão "Entrar" por class
+        IWebElement botaoEntrar = driver.FindElement(By.XPath("//span[@class='mat-button-wrapper' and contains(text(),'Sign in')]"));
+
+        // Clica no botão "Entrar"
+        botaoEntrar.Click();
+
+        // Aguarda alguns segundos (opcional)
+        System.Threading.Thread.Sleep(2000);
+
+        // Substitui o Thread.Sleep(2000) por uma espera explícita
+        IWebElement elementReceptivo = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("banner_menu_row_0_a_1")));
+
+        // Agora você pode interagir com o elemento
+        elementReceptivo.Click();
+
+        // Aguarda alguns segundos (opcional)
+        System.Threading.Thread.Sleep(1000);
+
+        // Clica na caixa de seleção
+        IWebElement selectElement = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("mat-select[formcontrolname='tipo']")));
+        selectElement.Click();
+
+        // Espera até que o item "Contrato" esteja visível no dropdown e o seleciona
+        IWebElement optionContrato = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//mat-option/span[contains(text(), 'Contrato')]")));
+        optionContrato.Click();
+
+        System.Threading.Thread.Sleep(1000);
+
+        // Clique no elemento para garantir que está focado
+        IWebElement elementoNumProposta = driver.FindElement(By.Name("valorContrato"));
+        elementoNumProposta.Click();
+
+        System.Threading.Thread.Sleep(1000);
+
+        // Insira o número da proposta
+        elementoNumProposta.SendKeys("000020000319");
+
+        // Clique no botão de busca
+        IWebElement botaoBuscar = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("card_content_0_button_0_span_0")));
+        botaoBuscar.Click();
+
+        //System.Threading.Thread.Sleep(2000);
+
+        IWebElement elementobotaoPid = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("card_content_2_span_0")));
+        elementobotaoPid.Click();
+
+        //System.Threading.Thread.Sleep(2000);
+
+        IWebElement elementobotaoPid2 = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("card_content_2_span_2")));
+        elementobotaoPid2.Click();
+
+        //System.Threading.Thread.Sleep(2000);
+
+        IWebElement elementobotaoPid3 = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("card_content_2_span_4")));
+        elementobotaoPid3.Click();
+
+        //System.Threading.Thread.Sleep(2000);
+
+        IWebElement elementobotaoPid4 = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("card_content_2_span_6")));
+        elementobotaoPid4.Click();
+
+        System.Threading.Thread.Sleep(1000);
+
+
+        // Encontrar o botão por texto usando XPath
+        IWebElement buttonElement = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='card_content_2']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr/td[10]/button/span[3]")));
+        // Interagir com o botão encontrado
+        buttonElement.Click();
+
+        // Clicar no Botão do protocolo (gerar)
+        IWebElement protocolo = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='card_content_5']/ruf-dynamic-datatable/div/div[1]/table/tbody/tr[1]/td[2]/button/span[3]")));
+        protocolo.Click();
+
+            IWebElement AbaDadosCadastrais = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("dynamic_sidemenu_dados_cadastrais_0_span_0")));
+        AbaDadosCadastrais.Click();
+
+        // Localizar o elemento pelo ID ou Name.
+        IWebElement campodataHora = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='card_header_16']/div[1]/mat-card-title")));
+        IWebElement campoNome = driver.FindElement(By.Name("nomeCliente"));
+        IWebElement campoCPF = driver.FindElement(By.Name("numCpf"));
+        IWebElement campoDataNasc = driver.FindElement(By.Name("dataNasc"));
+        IWebElement campoRadio = driver.FindElement(By.Name("codSexo"));
+        IWebElement campoNacionalidade = driver.FindElement(By.CssSelector("span.mat-mdc-select-min-line"));
+        IWebElement campoNaturalidade = driver.FindElement(By.Name("descNaturalidade"));
+        IWebElement campoUF = driver.FindElement(By.Name("uf"));
+        IWebElement campoTipoIdent = driver.FindElement(By.Name("tipoident"));
+        IWebElement campoNumRG = driver.FindElement(By.Name("ident"));
+        IWebElement campoDigRG = driver.FindElement(By.Name("digident"));
+        IWebElement campoOE = driver.FindElement(By.Name("oe"));
+        IWebElement campoDataExp = driver.FindElement(By.Name("dtexp"));
+        IWebElement campoUFRG = driver.FindElement(By.Name("ufident"));
+        IWebElement campoNomePai = driver.FindElement(By.Name("nomePai"));
+        IWebElement campoNomeMae = driver.FindElement(By.Name("nomeMae"));
+        IWebElement campoEstadoCivil = driver.FindElement(By.Name("estadocivil"));
+        IWebElement campoEscolaridade = driver.FindElement(By.Name("escolaridade"));
+        IWebElement campoDependente = driver.FindElement(By.Name("dependentes"));
+        IWebElement campoQtdeFilhos = driver.FindElement(By.Name("filhos"));
+
+        //Abrir Bloco OCUPAÇÔES
+
+        System.Threading.Thread.Sleep(8000);
+        IWebElement botaoEditarOcupacao = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='card_content_2']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr/td[6]/button[1]/span[3]")));
+        botaoEditarOcupacao.Click();
+
+        IWebElement campoNatOcup = driver.FindElement(By.Name("natureza"));
+        IWebElement campoProfissao = driver.FindElement(By.Name("profissao"));
+        IWebElement campoSalario = driver.FindElement(By.Name("rendabruta"));
+        IWebElement campoCargo = driver.FindElement(By.Name("cargo"));
+        IWebElement campoRendaLiq = driver.FindElement(By.Name("rendaliq"));
+        IWebElement campoTipoComprovante = driver.FindElement(By.Name("tipocomp"));
+        IWebElement campoDiaPagamento = driver.FindElement(By.Name("diapagto"));
+        IWebElement campoTipoOcupaçao = driver.FindElement(By.Name("tipoocupacao"));
+        IWebElement campoNomeEmpresa = driver.FindElement(By.Name("descRazaoSocial"));
+        IWebElement campoCGCEmpresa = driver.FindElement(By.Name("numCgcEmpresa"));
+        IWebElement campoTempoEmpresaAnos = driver.FindElement(By.Name("tempEmpAnos"));
+        IWebElement campoTempoEmpresaMeses = driver.FindElement(By.Name("tempEmpMeses"));
+        IWebElement campoCepEmpresa = driver.FindElement(By.Name("codCep"));
+        IWebElement campoRuaEmpresa = driver.FindElement(By.Name("descLogradouro"));
+        IWebElement campoNrEmpresa = driver.FindElement(By.Name("numLogradouro"));
+        IWebElement campoComplementoEmpresa = driver.FindElement(By.Name("descComplLogr"));
+        IWebElement campoBairroEmpresa = driver.FindElement(By.Name("descBairro"));
+        IWebElement campoCidadeEmpresa = driver.FindElement(By.Name("descCidade"));
+        IWebElement campoUFEmpresa = driver.FindElement(By.Name("siglaUfEnd"));
+        IWebElement campoContatoEmpresa = driver.FindElement(By.Name("nomeContato"));
+        IWebElement campoDDDEmpresa = driver.FindElement(By.Name("numAreaTelefone"));
+        IWebElement campoFoneEmpresa = driver.FindElement(By.Name("numTelefone"));
+        IWebElement campoRamalEmpresa = driver.FindElement(By.Name("codRamal"));
+        IWebElement campoDDDfaxEmpresa = driver.FindElement(By.Name("numAreaFax"));
+        IWebElement campoFonefaxEmpresa = driver.FindElement(By.Name("numFax"));
+        IWebElement campoDDD2Empresa = driver.FindElement(By.Name("numAreaTelCont"));
+        IWebElement campoFone2Empresa = driver.FindElement(By.Name("numTelefoneCont"));
+        IWebElement campoRamal2Empresa = driver.FindElement(By.Name("codRamalCont"));
+        IWebElement campoTempoEmpresaAntAnos = driver.FindElement(By.Name("qtdeAnoEmpAnt"));
+        IWebElement campoTempoEmpresaAntMeses = driver.FindElement(By.Name("qtdeMesEmpAnt"));
+        IWebElement campoDataDesligEmpresa = driver.FindElement(By.Name("dataDesligAnter"));
+
+        //Abrir Bloco ENDEREÇOS
+        IWebElement buttonEditarEndereco = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='card_content_3']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr/td[8]/button[1]/span[3]")));
+        // Interagir com o botão encontrado
+        buttonEditarEndereco.Click();
+
+        IWebElement campoRadio2 = driver.FindElement(By.Name("tipoendereco"));
+        IWebElement campoEnvioCorresp = driver.FindElement(By.XPath("//*[@id='mat-mdc-checkbox-6-input']"));
+        IWebElement campoCepRes = driver.FindElement(By.Name("cep"));
+        IWebElement campoRuaRes = driver.FindElement(By.Name("logradouro"));
+        IWebElement campoNrRes = driver.FindElement(By.Name("numero"));
+        IWebElement campoComplRes = driver.FindElement(By.Name("complemento"));
+        IWebElement campoBairroRes = driver.FindElement(By.Name("bairro"));
+        IWebElement campoCidadeRes = driver.FindElement(By.Name("cidade"));
+        IWebElement campoUFRes = driver.FindElement(By.Name("uf"));
+        IWebElement campoTipoRes = driver.FindElement(By.Name("tiporesidencia"));
+        IWebElement campoAluguelRes = driver.FindElement(By.Name("aluguel"));
+        IWebElement campoTempoResAno = driver.FindElement(By.Name("atuanos"));
+        IWebElement campoTempoResMes = driver.FindElement(By.Name("atumeses"));
+        //IWebElement campoTempoResAnoAnt = driver.FindElement(By.Name("antanos"));
+        //IWebElement campoTempoResMesAnt = driver.FindElement(By.Name("antmeses"));
+
+        //Abrir Bloco TELEFONE
+        IWebElement buttonEditarTelefone = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='card_content_11']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr/td[4]/button[1]/span[3]")));
+        //Interagir com o botão encontrado
+        buttonEditarTelefone.Click();
+
+        IWebElement campoDDDRes = driver.FindElement(By.Name("ddd"));
+        IWebElement campoFoneRes = driver.FindElement(By.Name("fone"));
+        IWebElement campoRamalRes = driver.FindElement(By.Name("ramal"));
+        IWebElement campoTipoFoneRes = driver.FindElement(By.Name("tipo"));
+
+        //BLOCO REFERENCIA
+
+        IWebElement campoNomeRef1 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[1]/td[1]"));
+        IWebElement campoAfinidadeRef1 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[1]/td[2]"));
+        IWebElement campoDDDRef1 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[1]/td[3]"));
+        IWebElement campoFoneRef1 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[1]/td[4]"));
+        IWebElement campoRamalRef1 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[1]/td[5]"));
+        IWebElement campoNomeRef2 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[2]/td[1]"));
+        IWebElement campoAfinidadeRef2 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[2]/td[2]"));
+        IWebElement campoDDDRef2 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[2]/td[3]"));
+        IWebElement campoFoneRef2 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[2]/td[4]"));
+        IWebElement campoRamalRef2 = driver.FindElement(By.XPath("//*[@id='card_content_12']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr[2]/td[5]"));
+
+        //Abrir Bloco Referencia BANCARIA
+        IWebElement buttonEditarCONTA = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='card_content_13']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr/td[14]/button[1]/span[3]")));
+        // Interagir com o botão encontrado
+        buttonEditarCONTA.Click();
+
+
+        IWebElement campoBanco = driver.FindElement(By.Name("banco"));
+        IWebElement campoAgencia = driver.FindElement(By.Name("agencia"));
+        IWebElement campoDigAgencia = driver.FindElement(By.Name("digAgencia"));
+        IWebElement campoConta = driver.FindElement(By.Name("conta"));
+        IWebElement campoDigConta = driver.FindElement(By.Name("digConta"));
+        IWebElement campoClienteDesde = driver.FindElement(By.Name("desde"));
+        IWebElement campoTipoConta = driver.FindElement(By.Name("tipoconta"));
+        IWebElement campoDataAbertura = driver.FindElement(By.Name("abertura"));
+        IWebElement campoPraça = driver.FindElement(By.Name("praca"));
+        IWebElement campoContaPrincipal = driver.FindElement(By.XPath("//*[@name='principal']/div/div/input"));
+        IWebElement campoTitular = driver.FindElement(By.XPath("//*[@name='titular']/div/div/input"));
+        IWebElement campoContaDoc = driver.FindElement(By.XPath("//*[@name='doc']/div/div/input"));
+        IWebElement campoAutDebito = driver.FindElement(By.XPath("//*[@name='autodebcta']/div/div/input"));
+
+        //Abrir Bloco EMAIL
+        IWebElement buttonEditarEMAIL = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='card_content_14']/ruf-dynamic-datatable/div/div[2]/table/tbody/tr/td[3]/button[1]/span[3]")));
+        //Interagir com o botão encontrado
+        buttonEditarEMAIL.Click();
+
+        IWebElement campoEmail = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("email")));
+        campoEmail.Click();
+        IWebElement campoClienteEmail = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("cliente")));
+
+
+
+        // Localize todos os elementos de radio button dentro do campoRadio
+        IReadOnlyCollection<IWebElement> opcoesRadio = campoRadio.FindElements(By.CssSelector("mat-radio-button"));
+        IReadOnlyCollection<IWebElement> opcoesRadio2 = campoRadio2.FindElements(By.CssSelector("mat-radio-button"));
+
+        // Encontre a opção marcada
+        IWebElement opcaoMarcada = opcoesRadio.FirstOrDefault(opcao => opcao.GetAttribute("class").Contains("mat-mdc-radio-checked"));
+        IWebElement opcaoMarcada2 = opcoesRadio2.FirstOrDefault(opcao => opcao.GetAttribute("class").Contains("mat-mdc-radio-checked"));
+
+
+
+        bool isCheckboxSelected = campoEnvioCorresp.Selected;
+        bool isCheckboxSelected2 = campoContaPrincipal.Selected;
+        bool isCheckboxSelected3 = campoTitular.Selected;
+        bool isCheckboxSelected4 = campoContaDoc.Selected;
+        bool isCheckboxSelected5 = campoAutDebito.Selected;
+
+
+
+        // Obter o valor do atributo "value" do elemento input
+        string valorCampoNome = campoNome.GetAttribute("value");
+        string valorCampoCPF = campoCPF.GetAttribute("value");
+        string valorCampoDataNasc = campoDataNasc.GetAttribute("value");
+        string valorOpcaoMarcada = opcaoMarcada?.GetAttribute("value");
+        string textoNacionalidade = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoNacionalidade);
+        string valorNaturalidade = campoNaturalidade.GetAttribute("value");
+        string valorUF = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoUF);
+        string textoTipoIdent = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoTipoIdent);
+        string valorNumRG = campoNumRG.GetAttribute("value");
+        string valorDigRG = campoDigRG.GetAttribute("value");
+        string textoOE = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoOE);
+        string valorDataExp = campoDataExp.GetAttribute("value");
+        string valorUFRG = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoUFRG);
+        string valorNomePai = campoNomePai.GetAttribute("value");
+        string valorNomeMae = campoNomeMae.GetAttribute("value");
+        string textoEstadoCivil = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoEstadoCivil);
+        string textoEscolaridade = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoEscolaridade);
+        string valorDependente = campoDependente.GetAttribute("value");
+        string valorQtdeFilhos = campoQtdeFilhos.GetAttribute("value");
+
+        string textoNatOcup = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoNatOcup);
+        string valorProfissao = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoProfissao);
+        string valorSalario = campoSalario.GetAttribute("value");
+        string valorCargo = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoCargo);
+        string valorRendaLiq = campoRendaLiq.GetAttribute("value");
+        string textoTipoComprovante = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoTipoComprovante);
+        string valorDiaPagamento = campoDiaPagamento.GetAttribute("value");
+        string valorOcupaçao = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoTipoOcupaçao);
+        string valorNomeEmpresa = campoNomeEmpresa.GetAttribute("value");
+        string valorCGCEmpresa = campoCGCEmpresa.GetAttribute("value");
+        string valorTempoEmpresaAnos = campoTempoEmpresaAnos.GetAttribute("value");
+        string valorTempoEmpresaMeses = campoTempoEmpresaMeses.GetAttribute("value");
+        string valorCepEmpresa = campoCepEmpresa.GetAttribute("value");
+        string valorRuaEmpresa = campoRuaEmpresa.GetAttribute("value");
+        string valorNrEmpresa = campoNrEmpresa.GetAttribute("value");
+        string valorComplementoEmpresa = campoComplementoEmpresa.GetAttribute("value");
+        string valorBairroEmpresa = campoBairroEmpresa.GetAttribute("value");
+        string valorCidadeEmpresa = campoCidadeEmpresa.GetAttribute("value");
+        string textoUFEmpresa = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoUFEmpresa);
+        string valorContatoEmpresa = campoContatoEmpresa.GetAttribute("value");
+        string valorDDDEmpresa = campoDDDEmpresa.GetAttribute("value");
+        string valorFoneEmpresa = campoFoneEmpresa.GetAttribute("value");
+        string valorRamalEmpresa = campoRamalEmpresa.GetAttribute("value");
+        string valorDDDfaxEmpresa = campoDDDfaxEmpresa.GetAttribute("value");
+        string valorFonefaxEmpresa = campoFonefaxEmpresa.GetAttribute("value");
+        string valorDDD2Empresa = campoDDD2Empresa.GetAttribute("value");
+        string valorFone2Empresa = campoFone2Empresa.GetAttribute("value");
+        string valorRamal2Empresa = campoRamal2Empresa.GetAttribute("value");
+        string valorTempoEmpresaAntAnos = campoTempoEmpresaAntAnos.GetAttribute("value");
+        string valorTempoEmpresaAntMeses = campoTempoEmpresaAntMeses.GetAttribute("value");
+        string valorDataDesligEmpresa = campoDataDesligEmpresa.GetAttribute("value");
+
+        string valorOpcaoMarcada2 = opcaoMarcada2?.GetAttribute("value");
+        string valorEnvioCorresp = isCheckboxSelected ? "Sim" : "Não";
+        string valorCepRes = campoCepRes.GetAttribute("value");
+        string valorRuaRes = campoRuaRes.GetAttribute("value");
+        string valorNrRes = campoNrRes.GetAttribute("value");
+        string valorComplRes = campoComplRes.GetAttribute("value");
+        string valorBairroRes = campoBairroRes.GetAttribute("value");
+        string valorCidadeRes = campoCidadeRes.GetAttribute("value");
+        string textoUFRes = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoUFRes);
+        string textoTipoRes = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoTipoRes);
+        string valorAluguelRes = campoAluguelRes.GetAttribute("value");
+        string valorTempoResAno = campoTempoResAno.GetAttribute("value");
+        string valorTempoResMes = campoTempoResMes.GetAttribute("value");
+
+        string valorDDDRes = campoDDDRes.GetAttribute("value");
+        string valorFoneRes = campoFoneRes.GetAttribute("value");
+        string valorRamalRes = campoRamalRes.GetAttribute("value");
+        string textoTipoFoneRes = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoTipoFoneRes);
+
+        string textoNomeRef1 = campoNomeRef1.Text;
+        string textoAfinidadeRef1 = campoAfinidadeRef1.Text;
+        string textoDDDRef1 = campoDDDRef1.Text;
+        string textoFoneRef1 = campoFoneRef1.Text;
+        string textoRamalRef1 = campoRamalRef1.Text;
+        string textoNomeRef2 = campoNomeRef2.Text;
+        string textoAfinidadeRef2 = campoAfinidadeRef2.Text;
+        string textoDDDRef2 = campoDDDRef2.Text;
+        string textoFoneRef2 = campoFoneRef2.Text;
+        string textoRamalRef2 = campoRamalRef2.Text;
+
+        string valorBanco = campoBanco.GetAttribute("value");
+        string valorAgencia = campoAgencia.GetAttribute("value");
+        string valorDigAgencia = campoDigAgencia.GetAttribute("value");
+        string valorConta = campoConta.GetAttribute("value");
+        string valorDigConta = campoDigConta.GetAttribute("value");
+        string valorClienteDesde = campoClienteDesde.GetAttribute("value");
+        string textoTipoConta = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoTipoConta);
+        string valorDataAbertura = campoDataAbertura.GetAttribute("value");
+        string textoPraça = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].textContent;", campoPraça);
+        string valorContaPrincipal = isCheckboxSelected2 ? "Sim" : "Não";
+        string valorTitular = isCheckboxSelected3 ? "Sim" : "Não";
+        string valorContaDoc = isCheckboxSelected4 ? "Sim" : "Não";
+        string valorAutDebito = isCheckboxSelected5 ? "Sim" : "Não";
+
+        string valorEmail = campoEmail.GetAttribute("value");
+        string textoClienteEmail = driver.FindElement(By.Name("cliente")).Text;
+
+        // Obter a data atual
+        DateTime dataAtual = DateTime.Now;
+
+        // Caminho para o arquivo onde você deseja salvar as informações
+        string caminhoArquivo = @"C:\Users\e5016150\Desktop\Testes_ATENDIMENTO CENCOSUD\Testes_clifor\Arquivo2.txt";
+
+        // Abrir ou criar o arquivo
+        using (StreamWriter sw = new StreamWriter(caminhoArquivo, false))
+        {
+            // Escrever as informações no arquivo
+            sw.WriteLine("Campos do Contrato: " + dataAtual.ToString("dd/MM/yyyy HH:mm:ss"));
+            sw.WriteLine($"Cliente: {valorCampoNome}");
+            sw.WriteLine($"CPF: {valorCampoCPF}");
+            sw.WriteLine($"Data Nasc: {valorCampoDataNasc}");
+            sw.WriteLine($"Genero: {valorOpcaoMarcada}");
+            sw.WriteLine($"Nacionalidade: {textoNacionalidade}");
+            sw.WriteLine($"Naturalidade: {valorNaturalidade}");
+            sw.WriteLine($"UF: {valorUF}");
+            sw.WriteLine($"TipoIdent: {textoTipoIdent}");
+            sw.WriteLine($"RG: {valorNumRG}-{valorDigRG}");
+            sw.WriteLine($"OE: {textoOE}");
+            sw.WriteLine($"Data Expedição: {valorDataExp}");
+            sw.WriteLine($"UFRG: {valorUFRG}");
+            sw.WriteLine($"Nome Pai: {valorNomePai}");
+            sw.WriteLine($"Nome Mae: {valorNomeMae}");
+            sw.WriteLine($"Estado Civil: {textoEstadoCivil}");
+            sw.WriteLine($"Escolaridade: {textoEscolaridade}");
+            sw.WriteLine($"Dependentes: {valorDependente}");
+            sw.WriteLine($"Qtde Filhos: {valorQtdeFilhos}");
+
+            sw.WriteLine($"Natureza Ocupação: {textoNatOcup}");
+            sw.WriteLine($"Profissão: {valorProfissao}");
+            sw.WriteLine($"Salário: {valorSalario}");
+            sw.WriteLine($"Cargo: {valorCargo}");
+            sw.WriteLine($"Renda Liquida: {valorRendaLiq}");
+            sw.WriteLine($"Tipo Comprovante: {textoTipoComprovante}");
+            sw.WriteLine($"Dia Pagamento: {valorDiaPagamento}");
+            sw.WriteLine($"Ocupação: {valorOcupaçao}");
+            sw.WriteLine($"Nome Empresa: {valorNomeEmpresa}");
+            sw.WriteLine($"CGC Empresa: {valorCGCEmpresa}");
+            sw.WriteLine($"Tempo Empresa: {valorTempoEmpresaAnos} Anos { valorTempoEmpresaMeses} Meses");
+            sw.WriteLine($"CEP Empresa: {valorCepEmpresa}");
+            sw.WriteLine($"RUA Empresa: {valorRuaEmpresa}");
+            sw.WriteLine($"NR Empresa: {valorNrEmpresa}");
+            sw.WriteLine($"Complemento Empresa: {valorComplementoEmpresa}");
+            sw.WriteLine($"Bairro Empresa: {valorBairroEmpresa}");
+            sw.WriteLine($"Cidade Empresa: {valorCidadeEmpresa}");
+            sw.WriteLine($"UF Empresa: {textoUFEmpresa}");
+            sw.WriteLine($"Contato Empresa: {valorContatoEmpresa}");
+            sw.WriteLine($"Telefone Empresa: DDD {valorDDDEmpresa} Fone {valorFoneEmpresa} Ramal {valorRamalEmpresa}");
+            sw.WriteLine($"FAX Empresa: DDD {valorDDDfaxEmpresa} Fone {valorFonefaxEmpresa}");
+            sw.WriteLine($"Telefone2 Empresa: DDD {valorDDD2Empresa} Fone {valorFone2Empresa} Ramal {valorRamal2Empresa}");
+            sw.WriteLine($"Tempo Empresa Ant: {valorTempoEmpresaAntAnos} Anos {valorTempoEmpresaAntMeses} Meses {valorDataDesligEmpresa}");
+            sw.WriteLine($"Data Desligamento: {valorDataDesligEmpresa}");
+
+            sw.WriteLine($"Local Corresp: {valorOpcaoMarcada2}");
+            sw.WriteLine($"Envio Corresp: {valorEnvioCorresp}");
+            sw.WriteLine($"Cep Res: {valorCepRes}");
+            sw.WriteLine($"Rua Res: {valorRuaRes}");
+            sw.WriteLine($"Nr Res: {valorNrRes}");
+            sw.WriteLine($"Complemento Res: {valorComplRes}");
+            sw.WriteLine($"Bairro Res: {valorBairroRes}");
+            sw.WriteLine($"Cidade Res: {valorCidadeRes}");
+            sw.WriteLine($"UF Res: {textoUFRes}");
+            sw.WriteLine($"Tipo Residencia: {textoTipoRes}");
+            sw.WriteLine($"Aluguel: {valorAluguelRes}");
+            sw.WriteLine($"Tempo Residencia: {valorTempoResAno} Anos {valorTempoResMes} Meses");
+
+            sw.WriteLine($"DDD Res: {valorDDDRes}");
+            sw.WriteLine($"Fone Res: {valorFoneRes}");
+            sw.WriteLine($"Ramal Res: {valorRamalRes}");
+            sw.WriteLine($"Tipo Tel Res: {textoTipoFoneRes}");
+
+            sw.WriteLine($"Nome Ref: {textoNomeRef1}");
+            sw.WriteLine($"Afinidade Ref: {textoAfinidadeRef1}");
+            sw.WriteLine($"DDD Ref: {textoDDDRef1}");
+            sw.WriteLine($"Fone Ref: {textoFoneRef1}");
+            sw.WriteLine($"Ramal Ref: {textoRamalRef1}");
+            sw.WriteLine($"Nome Ref2: {textoNomeRef2}");
+            sw.WriteLine($"Afinidade Ref2: {textoAfinidadeRef2}");
+            sw.WriteLine($"DDD Ref2: {textoDDDRef2}");
+            sw.WriteLine($"Fone Ref2: {textoFoneRef2}");
+            sw.WriteLine($"Ramal Ref2: {textoRamalRef2}");
+
+            sw.WriteLine($"Banco: {valorBanco}");
+            sw.WriteLine($"Agencia e Digito: {valorAgencia}-{valorDigAgencia}");
+            sw.WriteLine($"Conta e Digito: {valorConta}-{valorDigConta}");
+            sw.WriteLine($"Cliente Desde: {valorClienteDesde}");
+            sw.WriteLine($"Tipo Residencia: {textoTipoConta}");
+            sw.WriteLine($"Data Abertura: {valorDataAbertura}");
+            sw.WriteLine($"Praça: {textoPraça}");
+            sw.WriteLine($"Conta Principal: {valorContaPrincipal}");
+            sw.WriteLine($"Titular: {valorTitular}");
+            sw.WriteLine($"Conta para DOC: {valorContaDoc}");
+            sw.WriteLine($"Autoriza Debito em Conta: {valorAutDebito}");
+
+            sw.WriteLine($"Email: {valorEmail}");
+            sw.WriteLine($"Tipo Email: {textoClienteEmail}");
+
+            // Fecha o navegador
+            driver.Quit();
+
+        }
+    }
+
+
+
+    catch (Exception ex)
+    {
+        Console.WriteLine("Ocorreu um erro: " + ex.Message);
+    }
+}
+
+    
+
+    void TerceiraParte()
+    {
+    // Caminhos para os dois arquivos que você deseja comparar
+    string caminhoArquivo1 = @"C:\Users\e5016150\Desktop\Testes_ATENDIMENTO CENCOSUD\Testes_clifor\Arquivo.txt";
+    string caminhoArquivo2 = @"C:\Users\e5016150\Desktop\Testes_ATENDIMENTO CENCOSUD\Testes_clifor\Arquivo2.txt";
+
+    // Lê os conteúdos dos arquivos
+    string[] linhasArquivo1 = File.ReadAllLines(caminhoArquivo1);
+    string[] linhasArquivo2 = File.ReadAllLines(caminhoArquivo2);
+
+    // Criar um novo arquivo para gravar as diferenças
+    string caminhoArquivoSaida = @"C:\Users\e5016150\Desktop\Testes_ATENDIMENTO CENCOSUD\Testes_clifor\diferencas.txt";
+    using (StreamWriter sw = new StreamWriter(caminhoArquivoSaida))
+    {
+        // Realiza a comparação linha a linha usando os campos
+        for (int i = 0; i < Math.Min(linhasArquivo1.Length, linhasArquivo2.Length); i++)
+        {
+            var camposArquivo1 = linhasArquivo1[i].Split(new[] { ':' }, 2, StringSplitOptions.RemoveEmptyEntries);
+            var camposArquivo2 = linhasArquivo2[i].Split(new[] { ':' }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+            // Compara os campos das duas linhas
+            for (int j = 0; j < Math.Min(camposArquivo1.Length, camposArquivo2.Length); j++)
+            {
+                if (camposArquivo1.Length > j && camposArquivo2.Length > j)
+                {
+                    if (camposArquivo1[j] != camposArquivo2[j])
+                    {
+                        sw.WriteLine($"Diferença na linha {i + 1}:");
+                        sw.WriteLine($"Arquivo1: {linhasArquivo1[i]}");
+                        sw.WriteLine($"Arquivo2: {linhasArquivo2[i]}");
+                        sw.WriteLine(new string('-', 30));
+                        break; // Encerra a comparação quando uma diferença é encontrada
+                    }
+                }
+            }
+        }
+    }
+
+    Console.WriteLine("Diferenças foram escritas em um arquivo.");
+    Console.ReadLine(); // Aguarda uma tecla ser pressionada para fechar o console
+    
+
+    }
+}
